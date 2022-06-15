@@ -3,6 +3,7 @@
 
 from datetime import datetime
 from typing import List
+import os
 
 from alienvault.models import Pulse
 from OTXv2 import OTXv2  # type: ignore
@@ -16,7 +17,7 @@ class AlienVaultClient:
         """Initialize AlienVault client."""
         server = base_url if not base_url.endswith("/") else base_url[:-1]
 
-        self.otx = OTXv2(api_key, server=server)
+        self.otx = OTXv2(api_key, server=server, proxy={http: os.environ['HTTP_PROXY'], https: os.environ['HTTPS_PROXY']})
 
     def get_pulses_subscribed(
         self, modified_since: datetime, limit: int = 20
